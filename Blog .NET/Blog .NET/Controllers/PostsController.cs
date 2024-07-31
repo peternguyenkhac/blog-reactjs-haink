@@ -97,7 +97,7 @@ namespace Blog_.NET.Controllers
         // POST: api/Posts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Post>> Post([FromForm]Post post, [FromForm]IFormFile imageUpload)
+        public async Task<ActionResult<Post>> Post([FromForm]Post post, [FromForm]IFormFile? imageUpload)
         {
             if (!ModelState.IsValid)
             {
@@ -166,7 +166,7 @@ namespace Blog_.NET.Controllers
             {
                 Directory.CreateDirectory(uploadPath);
             }
-            var fileName = imageUpload.FileName;
+            var fileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + imageUpload.FileName;
             var filePath = Path.Combine(uploadPath, fileName);
             using (var fileStream = new FileStream(filePath, FileMode.Create))
             {

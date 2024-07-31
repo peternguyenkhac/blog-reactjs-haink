@@ -23,8 +23,10 @@ namespace Blog_.NET
             builder.Services.AddSwaggerGen();
 
             // Add db context
+            var connectionString = builder.Configuration.GetConnectionString("Blog");
+
             builder.Services.AddDbContext<BlogContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("Blog")));
+            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             builder.Services.AddCors(options =>
             {
@@ -38,6 +40,14 @@ namespace Blog_.NET
             });
 
             var app = builder.Build();
+
+            // Seed data
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                SeedData.Initialize(services);
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

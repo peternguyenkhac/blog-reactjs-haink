@@ -26,6 +26,8 @@ function useForm(initialValues) {
         } else {
             setInputs(values => ({ ...values, [name]: value }));
         }
+
+        
     };
 
     return {

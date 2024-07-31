@@ -6,8 +6,8 @@ import apiService from "../services/apiService";
 
 export default function EditPost() {
     const { id } = useParams();
-    const { data, loading } = usePost(id);
-    const { inputs, setInputs, file, handleChange } = useForm({});
+    const { data, resetData ,loading } = usePost(id);
+    const { inputs, setInputs, file, handleChange } = useForm(data);
 
     useEffect(() => {
         if(data){
@@ -15,12 +15,12 @@ export default function EditPost() {
         }
     }, [data, setInputs])
 
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const formData = new FormData();
         for (const key in inputs) {
             if (Array.isArray(inputs[key])) { // position array
-                console.log(inputs[key]);
                 inputs[key].forEach((item) => formData.append(key, item));
             } else {
                 formData.append(key, inputs[key]);
@@ -65,7 +65,7 @@ export default function EditPost() {
     return (
         <div className="card">
             <div className="card-header">
-                New Blog
+                {id ? "Edit Post" : "New Post"}
             </div>
             <div className="card-body">
                 <form id="postForm" onSubmit={handleSubmit}>
@@ -93,34 +93,34 @@ export default function EditPost() {
                     <div className="Form-group mb-3">
                         <label className="Form-label">Vị trí</label>
                         <div className="Form-check htmlForm-check-inline">
-                            <input className="Form-check-input" type="checkbox" id="pVietNam" name="position" value="Việt Nam" onClick={handleChange} defaultChecked={inputs.position?.includes('Việt Nam')} />
+                            <input className="Form-check-input" type="checkbox" id="pVietNam" name="position" value="Việt Nam" onChange={handleChange} checked={inputs.position?.includes('Việt Nam')} />
                             <label className="Form-check-label ms-2" htmlFor="pVietNam">Việt Nam</label>
                         </div>
                         <div className="Form-check htmlForm-check-inline">
-                            <input className="Form-check-input" type="checkbox" id="pTrungQuoc" name="position" value="Trung Quốc" onClick={handleChange} defaultChecked={inputs.position?.includes('Trung Quốc')} />
+                            <input className="Form-check-input" type="checkbox" id="pTrungQuoc" name="position" value="Trung Quốc" onChange={handleChange} checked={inputs.position?.includes('Trung Quốc')} />
                             <label className="Form-check-label ms-2" htmlFor="pTrungQuoc">Trung Quốc</label>
                         </div>
                         <div className="Form-check htmlForm-check-inline">
-                            <input className="Form-check-input" type="checkbox" id="pChauAu" name="position" value="Châu Âu" onClick={handleChange} defaultChecked={inputs.position?.includes('Châu Âu')} />
+                            <input className="Form-check-input" type="checkbox" id="pChauAu" name="position" value="Châu Âu" onChange={handleChange} checked={inputs.position?.includes('Châu Âu')} />
                             <label className="Form-check-label ms-2" htmlFor="pChauAu">Châu Âu</label>
                         </div>
                         <div className="Form-check htmlForm-check-inline">
-                            <input className="Form-check-input" type="checkbox" id="pChauA" name="position" value="Châu Á" onClick={handleChange} defaultChecked={inputs.position?.includes('Châu Á')} />
+                            <input className="Form-check-input" type="checkbox" id="pChauA" name="position" value="Châu Á" onChange={handleChange} checked={inputs.position?.includes('Châu Á')} />
                             <label className="Form-check-label ms-2" htmlFor="pChauA">Châu Á</label>
                         </div>
                         <div className="Form-check htmlForm-check-inline">
-                            <input className="Form-check-input" type="checkbox" id="pChauMy" name="position" value="Châu Mỹ" onClick={handleChange} defaultChecked={inputs.position?.includes('Châu Mỹ')} />
+                            <input className="Form-check-input" type="checkbox" id="pChauMy" name="position" value="Châu Mỹ" onChange={handleChange} checked={inputs.position?.includes('Châu Mỹ')} />
                             <label className="Form-check-label ms-2" htmlFor="pChauMy">Châu Mỹ</label>
                         </div>
                     </div>
                     <div className="Form-group mb-3">
                         <label className="Form-label">Public</label>
                         <div className="Form-check htmlForm-check-inline">
-                            <input className="Form-check-input" type="radio" id="public" name="isPublic" value="true" onChange={handleChange} defaultChecked={inputs.isPublic} />
+                            <input className="Form-check-input" type="radio" id="public" name="isPublic" value="true" onChange={handleChange} checked={inputs.isPublic.toString() == "true"} />
                             <label className="Form-check-label ms-2" htmlFor="public">Yes</label>
                         </div>
                         <div className="Form-check htmlForm-check-inline">
-                            <input className="Form-check-input" type="radio" id="public2" name="isPublic" value="false" onChange={handleChange} defaultChecked={!(inputs.isPublic)} />
+                            <input className="Form-check-input" type="radio" id="public2" name="isPublic" value="false" onChange={handleChange} checked={inputs.isPublic.toString() == "false"} />
                             <label className="Form-check-label ms-2" htmlFor="public2">No</label>
                         </div>
 
@@ -130,7 +130,8 @@ export default function EditPost() {
 
                         <div className="htmlForm-group col-md-6">
                             <label htmlFor="category">Loại</label>
-                            <select id="category" name="category" required className="form-select" onChange={handleChange}>
+                            <select id="category" name="category" required className="form-select" value={inputs.category || ""} onChange={handleChange}>
+                                <option value="" disabled>Select</option>
                                 <option value="Du lịch">Du lịch</option>
                                 <option value="Ẩm thực">Ẩm thực</option>
                                 <option value="Giải trí">Giải trí</option>
@@ -138,14 +139,14 @@ export default function EditPost() {
                         </div>
                         <div className="htmlForm-group col-md-6">
                             <label htmlFor="publishDate">Ngày public</label>
-                            <input type="datetime-local" className="form-control" id="publishDate" name="publishDate" value={inputs.publishDate} required onChange={handleChange} />
+                            <input type="datetime-local" className="form-control" id="publishDate" name="publishDate" defaultValue={inputs.publishDate || ""} required onChange={handleChange} />
                         </div>
                     </div>
                 </form>
             </div>
             <div className="card-footer text-center">
                 <button type="submit" className="btn btn-success me-2" form="postForm">Submit</button>
-                <button type="button" className="btn btn-primary" >Clear</button>
+                <button type="button" className="btn btn-primary" onClick={resetData}>Clear</button>
             </div>
         </div>
 
