@@ -20,7 +20,7 @@ export async function getData(endpoint, params) {
 export async function postData(endpoint, data, options = {}) {
   try {
     const response = await api.post(endpoint, data, options);
-    return response.data;
+    return response;
   } catch (error) {
     console.error('Error posting data:', error);
     throw error;
@@ -30,7 +30,7 @@ export async function postData(endpoint, data, options = {}) {
 export async function putData(endpoint, data, options = {}) {
   try {
     const response = await api.put(endpoint, data, options);
-    return response.data;
+    return response;
   } catch (error) {
     console.error('Error putting data:', error);
     throw error;

@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import dateFormat from "dateformat";
 import apiService from "../services/apiService";
+import { toast } from 'react-toastify';
 
 
 export default function PostTable({ data, setData, loading }) {
@@ -13,6 +14,7 @@ export default function PostTable({ data, setData, loading }) {
             const result = await apiService.deleteData(`/api/posts/${id}`);
             if (result) {
                 setData(prev => prev.filter(p => p.id != id));
+                toast.success("Xoá thành công");
             }
         }
     }

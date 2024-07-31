@@ -1,13 +1,15 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useForm from "../hooks/useForm"
 import usePost from "../hooks/usePost";
 import { useEffect } from "react";
 import apiService from "../services/apiService";
+import { toast } from 'react-toastify';
 
 export default function EditPost() {
     const { id } = useParams();
     const { data, resetData ,loading } = usePost(id);
     const { inputs, setInputs, file, handleChange } = useForm(data);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if(data){
@@ -37,14 +39,22 @@ export default function EditPost() {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
-                console.log(result);
+
+                if(result){
+                    toast.success("Cập nhật thành công");
+                    navigate("/");
+                }
             } else {
                 const result = await apiService.postData(`/api/posts`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
-                console.log(result);
+                
+                if(result){
+                    toast.success("Thêm mới thành công");
+                    navigate("/");
+                }
             }
         } catch (error) {
             console.error(error);
