@@ -10,7 +10,7 @@ export default function Header() {
                             </a>
                         </div>
                         <div className="col-10 text-center">
-                            <h1 className="text-white">Blog Managment</h1>
+                            <h1 className="text-white">Blog Management</h1>
                         </div>
                     </div>
                 </div>

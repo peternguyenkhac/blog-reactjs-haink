@@ -12,9 +12,11 @@ export default function PostTable({ data, setData, loading }) {
 
         if (confirm) {
             const result = await apiService.deleteData(`/api/posts/${id}`);
-            if (result) {
+            if (result.status == 204) {
                 setData(prev => prev.filter(p => p.id != id));
                 toast.success("Xoá thành công");
+            }else{
+                toast.error("Thất bại");
             }
         }
     }

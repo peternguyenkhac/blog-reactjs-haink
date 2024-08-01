@@ -7,12 +7,12 @@ import { toast } from 'react-toastify';
 
 export default function EditPost() {
     const { id } = useParams();
-    const { data, resetData ,loading } = usePost(id);
+    const { data, resetData, loading } = usePost(id);
     const { inputs, setInputs, file, handleChange } = useForm(data);
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(data){
+        if (data) {
             setInputs(data)
         }
     }, [data, setInputs])
@@ -40,9 +40,11 @@ export default function EditPost() {
                     }
                 });
 
-                if(result){
+                if (result.status == 204) {
                     toast.success("Cập nhật thành công");
                     navigate("/");
+                } else {
+                    toast.error("Thất bại");
                 }
             } else {
                 const result = await apiService.postData(`/api/posts`, formData, {
@@ -50,10 +52,12 @@ export default function EditPost() {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
-                
-                if(result){
+
+                if (result.status == 204) {
                     toast.success("Thêm mới thành công");
                     navigate("/");
+                } else {
+                    toast.error("Thất bại");
                 }
             }
         } catch (error) {
@@ -96,9 +100,9 @@ export default function EditPost() {
                     <div className="htmlForm-group mb-3">
                         <label htmlFor="formFile" className="Form-label">Hình ảnh</label>
                         <input className="form-control mb-3" type="file" name="imageUpload" id="formFile" accept="image/*" onChange={handleChange} />
-                        { (inputs.updateImage || inputs.image) &&
+                        {(inputs.updateImage || inputs.image) &&
                             <img src={inputs.updateImage || `${import.meta.env.VITE_API_HOST}/${inputs.image}`} className="rounded" height={200} alt="..."></img>
-                        } 
+                        }
                     </div>
                     <div className="Form-group mb-3">
                         <label className="Form-label">Vị trí</label>
